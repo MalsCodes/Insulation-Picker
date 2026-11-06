@@ -12,8 +12,10 @@
             padding: 0 20px;
             background-color: #f9f9f9;
         }
-        h1 { color: #333; }
-        .controls { 
+        h1 {
+            color: #333;
+        }
+        .controls {
             display: flex;
             flex-wrap: wrap;
             gap: 15px;
@@ -78,7 +80,9 @@
             background-color: #f4f4f4;
             font-weight: 600;
         }
-        tr:hover { background-color: #fdfdfd; }
+        tr:hover {
+            background-color: #fdfdfd;
+        }
     </style>
 </head>
 <body>
@@ -88,7 +92,7 @@
     <div class="controls">
         <div class="filter-group">
             <label for="searchInput">Text Search</label>
-            <input type="text" id="searchInput" placeholder="Search by Brand, Application and R-Value" oninput="filterData()">
+            <input type="text" id="searchInput" placeholder="Search by Brand, Application or R-Value" oninput="filterData()">
         </div>
         <div class="filter-group">
             <label for="brandFilter">Filter by Brand</label>
@@ -128,8 +132,8 @@
             try {
                 const response = await fetch('data.csv');
                 const csvText = await response.text();
-                
                 const rows = csvText.split('\n').map(row => row.split(','));
+                
                 headers = rows[0].map(h => h.trim().toLowerCase());
                 
                 appData = rows.slice(1)
@@ -142,7 +146,7 @@
                         return item;
                     });
 
-                populateDropdowns();
+                populateDropdowns(appData);
                 renderTable(appData);
             } catch (error) {
                 console.error('Error fetching the CSV data:', error);
@@ -150,17 +154,20 @@
             }
         }
 
-        function populateDropdowns() {
-            populateSelect('brandFilter', 'brand');
-            populateSelect('appFilter', 'application');
-            populateSelect('rValueFilter', 'r-value');
+        function populateDropdowns(currentData) {
+            populateSelect('brandFilter', 'brand', currentData);
+            populateSelect('appFilter', 'application', currentData);
+            populateSelect('rValueFilter', 'r-value', currentData);
         }
 
-        function populateSelect(elementId, dataKey) {
+        function populateSelect(elementId, dataKey, currentData) {
             const selectElement = document.getElementById(elementId);
             if (!selectElement) return;
 
-            const uniqueValues = [...new Set(appData.map(item => item[dataKey]).filter(Boolean))];
+            const previousSelection = selectElement.value;
+            selectElement.innerHTML = selectElement.options[0].outerHTML;
+
+            const uniqueValues = [...new Set(currentData.map(item => item[dataKey]).filter(Boolean))];
             uniqueValues.sort((a, b) => a.localeCompare(b, undefined, {numeric: true, sensitivity: 'base'}));
 
             uniqueValues.forEach(val => {
@@ -169,6 +176,12 @@
                 opt.textContent = val;
                 selectElement.appendChild(opt);
             });
+
+            if (uniqueValues.includes(previousSelection)) {
+                selectElement.value = previousSelection;
+            } else {
+                selectElement.value = ""; 
+            }
         }
 
         function renderTable(data) {
@@ -176,7 +189,7 @@
             const tbody = document.getElementById('tableBody');
             
             headerRow.innerHTML = headers.map(h => `<th>${h.toUpperCase()}</th>`).join('');
-            
+
             if (data.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="${headers.length}">No records found matching those filters.</td></tr>`;
                 return;
@@ -198,19 +211,44 @@
                 const matchesBrand = !selectedBrand || item['brand'] === selectedBrand;
                 const matchesApp = !selectedApp || item['application'] === selectedApp;
                 const matchesRValue = !selectedRValue || item['r-value'] === selectedRValue;
-
                 return matchesSearch && matchesBrand && matchesApp && matchesRValue;
             });
+
+            const dataForBrandOptions = appData.filter(item => {
+                const matchesSearch = Object.values(item).some(val => val.toLowerCase().includes(searchTerm));
+                const matchesApp = !selectedApp || item['application'] === selectedApp;
+                const matchesRValue = !selectedRValue || item['r-value'] === selectedRValue;
+                return matchesSearch && matchesApp && matchesRValue;
+            });
+
+            const dataForAppOptions = appData.filter(item => {
+                const matchesSearch = Object.values(item).some(val => val.toLowerCase().includes(searchTerm));
+                const matchesBrand = !selectedBrand || item['brand'] === selectedBrand;
+                const matchesRValue = !selectedRValue || item['r-value'] === selectedRValue;
+                return matchesSearch && matchesBrand && matchesRValue;
+            });
+
+            const dataForRValueOptions = appData.filter(item => {
+                const matchesSearch = Object.values(item).some(val => val.toLowerCase().includes(searchTerm));
+                const matchesBrand = !selectedBrand || item['brand'] === selectedBrand;
+                const matchesApp = !selectedApp || item['application'] === selectedApp;
+                return matchesSearch && matchesBrand && matchesApp;
+            });
+
+            populateSelect('brandFilter', 'brand', dataForBrandOptions);
+            populateSelect('appFilter', 'application', dataForAppOptions);
+            populateSelect('rValueFilter', 'r-value', dataForRValueOptions);
 
             renderTable(filtered);
         }
 
-        // Reset inputs and re-render full table data
         function clearAllFilters() {
             document.getElementById('searchInput').value = '';
             document.getElementById('brandFilter').value = '';
             document.getElementById('appFilter').value = '';
             document.getElementById('rValueFilter').value = '';
+            
+            populateDropdowns(appData);
             renderTable(appData);
         }
 
