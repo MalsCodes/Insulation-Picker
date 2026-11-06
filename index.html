@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static CSV Data App</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background-color: #f9f9f9;
+        }
+        h1 { color: #333; }
+        .controls { 
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            align-items: flex-end;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            flex: 1;
+            min-width: 180px;
+        }
+        label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+        }
+        input, select {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            background-color: #fff;
+        }
+        .clear-btn {
+            padding: 9px 16px;
+            background-color: #f4f4f4;
+            color: #444;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .clear-btn:hover {
+            background-color: #e2e2e2;
+            color: #000;
+            border-color: #bbb;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background-color: #f4f4f4;
+            font-weight: 600;
+        }
+        tr:hover { background-color: #fdfdfd; }
+    </style>
+</head>
+<body>
+
+    <h1>Product Directory</h1>
+    
+    <div class="controls">
+        <div class="filter-group">
+            <label for="searchInput">Text Search</label>
+            <input type="text" id="searchInput" placeholder="Search by Brand, Application and R-Value" oninput="filterData()">
+        </div>
+        <div class="filter-group">
+            <label for="brandFilter">Filter by Brand</label>
+            <select id="brandFilter" onchange="filterData()">
+                <option value="">All Brands</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="appFilter">Filter by Application</label>
+            <select id="appFilter" onchange="filterData()">
+                <option value="">All Applications</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="rValueFilter">Filter by R-Value</label>
+            <select id="rValueFilter" onchange="filterData()">
+                <option value="">All R-Values</option>
+            </select>
+        </div>
+        <button type="button" class="clear-btn" onclick="clearAllFilters()">Clear Filters</button>
+    </div>
+
+    <table id="dataTable">
+        <thead>
+            <tr id="tableHeader"><!-- Headers generated dynamically --></tr>
+        </thead>
+        <tbody id="tableBody">
+            <tr><td colspan="4">Loading data...</td></tr>
+        </tbody>
+    </table>
+
+    <script>
+        let appData = [];
+        let headers = [];
+
+        async function loadCSV() {
+            try {
+                const response = await fetch('data.csv');
+                const csvText = await response.text();
+                
+                const rows = csvText.split('\n').map(row => row.split(','));
+                headers = rows[0].map(h => h.trim().toLowerCase());
+                
+                appData = rows.slice(1)
+                    .filter(row => row.length === headers.length && row.join('').trim() !== "")
+                    .map(row => {
+                        let item = {};
+                        headers.forEach((header, index) => {
+                            item[header] = row[index].trim();
+                        });
+                        return item;
+                    });
+
+                populateDropdowns();
+                renderTable(appData);
+            } catch (error) {
+                console.error('Error fetching the CSV data:', error);
+                document.getElementById('tableBody').innerHTML = `<tr><td colspan="100%">Failed to load data. Ensure your column headers match your data structure.</td></tr>`;
+            }
+        }
+
+        function populateDropdowns() {
+            populateSelect('brandFilter', 'brand');
+            populateSelect('appFilter', 'application');
+            populateSelect('rValueFilter', 'r-value');
+        }
+
+        function populateSelect(elementId, dataKey) {
+            const selectElement = document.getElementById(elementId);
+            if (!selectElement) return;
+
+            const uniqueValues = [...new Set(appData.map(item => item[dataKey]).filter(Boolean))];
+            uniqueValues.sort((a, b) => a.localeCompare(b, undefined, {numeric: true, sensitivity: 'base'}));
+
+            uniqueValues.forEach(val => {
+                const opt = document.createElement('option');
+                opt.value = val;
+                opt.textContent = val;
+                selectElement.appendChild(opt);
+            });
+        }
+
+        function renderTable(data) {
+            const headerRow = document.getElementById('tableHeader');
+            const tbody = document.getElementById('tableBody');
+            
+            headerRow.innerHTML = headers.map(h => `<th>${h.toUpperCase()}</th>`).join('');
+            
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="${headers.length}">No records found matching those filters.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = data.map(item => {
+                return `<tr>${headers.map(h => `<td>${item[h]}</td>`).join('')}</tr>`;
+            }).join('');
+        }
+
+        function filterData() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const selectedBrand = document.getElementById('brandFilter').value;
+            const selectedApp = document.getElementById('appFilter').value;
+            const selectedRValue = document.getElementById('rValueFilter').value;
+
+            const filtered = appData.filter(item => {
+                const matchesSearch = Object.values(item).some(val => val.toLowerCase().includes(searchTerm));
+                const matchesBrand = !selectedBrand || item['brand'] === selectedBrand;
+                const matchesApp = !selectedApp || item['application'] === selectedApp;
+                const matchesRValue = !selectedRValue || item['r-value'] === selectedRValue;
+
+                return matchesSearch && matchesBrand && matchesApp && matchesRValue;
+            });
+
+            renderTable(filtered);
+        }
+
+        // Reset inputs and re-render full table data
+        function clearAllFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('brandFilter').value = '';
+            document.getElementById('appFilter').value = '';
+            document.getElementById('rValueFilter').value = '';
+            renderTable(appData);
+        }
+
+        loadCSV();
+    </script>
+</body>
+</html>

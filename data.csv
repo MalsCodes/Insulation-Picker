@@ -1,0 +1,69 @@
+Brand,Application,R-Value,Thickness,Dimensions (mm),Pieces PP,Area PP (m3)
+Bradford,Wall,R1.8,90,1160 x 580,22,14.8
+Bradford,Wall,R2.2,90,1160 x 580,16,10.8
+Bradford,Wall,R2.4,90,1160 x 580,10,6.7
+Bradford,Wall,R2.6,90,1160 x 580,8,5.4
+Bradford,Wall,R2.8,90,1160 x 580,5,3.4
+Bradford,Wall,R3.5,140,1160 x 580,10,6.7
+Bradford,Wall,R4.0 (HP),140,1160 x 580,5,3.4
+Bradford,Ceiling,R1.8 (HD),90,1160 x 430,22,11.0
+Bradford,Ceiling,R2.9,145,1160 x 430,20,10.0
+Bradford,Ceiling,R3.3,165,1160 x 430,16,8.0
+Bradford,Ceiling,R3.6,185,1160 x 430,16,8.0
+Bradford,Ceiling,R4.0,215,1160 x 430,12,6.0
+Bradford,Ceiling,R5.2 (HP),240,1160 x 430,8,4.0
+Bradford,Ceiling,R6.3 (HP),260,1160 x 430,6,3.0
+Bradford,Ceiling,R7.3 (HP),290,1160 x 430,4,2.0
+Bradford,Ceiling,R7.3 (HP),290,1160 x 450,4,2.0
+Bradford,GlassWool Blanket,R1.3,60,30m x 1200,1,36.0
+Bradford,GlassWool Blanket,R1.8,80,15m x 1200,1,18.0
+Bradford,GlassWool Blanket,R2.2,90,15m x 1200,1,18.0
+Bradford,GlassWool Blanket,R2.6,120,10m x 1200,1,12.0
+Bradford,GlassWool Blanket,R2.9,115,8m x 1200,1,9.6
+Bradford,GlassWool Blanket,R3.3,145,10m x 1200,1,12.0
+Bradford,GlassWool Blanket,R3.6,165,6m x 1200,1,7.2
+Bradford,Skillion Blanket,R3.2,115,8m x 1200,1,9.6
+Bradford,Under Floor,R1.6,70,1160 x 415,16,7.7
+Bradford,Under Floor,R1.6,70,1160 x 565,16,10.5
+Bradford,Under Floor,R2.6,90,1160 x 415,8,3.8
+Bradford,Under Floor,R2.6,90,1160 x 565,8,5.2
+Bradford,Under Floor,R3.2,110,1160 x 565,5,3.3
+Bradford,DIY Pack,R2.4,90,7m x 580,1,4.1
+Bradford,Acoustic,R1.8,75,1160 x 580,16,10.8
+Bradford,Acoustic,R2.2,90,1160 x 580,16,10.8
+Batts,Roof - Thermal Classic,R1.8,95,1220 x 432,,14.4
+Batts,Roof - Thermal Classic,R2.2,115,1220 x 432,,13.3
+Batts,Roof - Thermal Classic,R2.6,140,1220 x 432,,11.1
+Batts,Roof - Thermal Classic,R3.2,170,1220 x 432,,8.8
+Batts,Roof - Thermal Classic,R3.6,180,1220 x 432,,7.7
+Batts,Roof - Thermal Ultra,R4.0,195,1220 x 432,,6.6
+Batts,Roof - Thermal Ultra,R5.0,220,1220 x 432,,4.4
+Batts,Roof - Thermal Ultra,R6.0,235,1220 x 432,,3.9
+Batts,Roof - Thermal Ultra,R6.3,250,1220 x 432,,3.3
+Batts,Roof - Thermal Ultra,R7.0,260,1220 x 432,,2.8
+Batts,Roof - Skillion,R3.2,115,1220 x 432,,3.9
+Batts,Roof - Skillion,R3.6,165,1220 x 432,,6.6
+Batts,Roof - Thermal Retrofit,R2.9,150,1220 x 4321,,10.0
+Batts,Roof - Thermal Retrofit,R3.3,175,1220 x 432,,8.8
+Batts,Wall - Thermal Classic,R1.8,90,1140 x 560,,19.6
+Batts,Wall - Thermal Classic,R2.2,90,1140 x 560,,15.8
+Batts,Wall - Thermal Classic,R2.4,90,1140 x 560,,12.1
+Batts,Wall - Thermal Ultra,R2.6,90,1140 x 560,,11.3
+Batts,Wall - Thermal Ultra,R2.8,90,1140 x 560,,7.5
+Batts,Masonry,R1.1,40,1120 x 580,,0.0
+Batts,Masonry,R1.2,50,1120 x 580,,0.0
+Batts,Ultra Wall 140mm,R3.2,140,1140 x 560,,11.3
+Batts,Ultra Narrow Wall 140mm,R3.2,140,1140 x 380,,8.6
+Batts,Ultra Wall 140mm,R4.0,140,1140 x 560,,6.0
+Batts,Ultra Narrow Wall 140mm,R4.0,140,1140 x 380,,5.0
+Batts,Steel Wall,R2.2,90,1220 x 610,,15.6
+Batts,Ultra Steel Wall,R2.6,90,1220 x 610,,9.7
+Batts,Narrow Wall,R2.2,90,1140 x 380,,11.2
+Batts,Narrow Wall Ultra,R2.6,90,1140 x 380,,9.2
+Batts,Roof & Wall HandyPack,R2.4,90,7m x 580,,
+Batts,Wall Acoustic 100,,100,1140 x 560,,14.9
+Batts,Wall Acoustic 75,,75,1140 x 560,,19.5
+Batts,Floor - Thermal Narrow,R1.6,70,1220 x 480,,8.8
+Batts,Floor - Thermal Wide,R1.6,70,1220 x 580,,11.3
+Batts,Floor - Thermal Narrow,R2.6,110,1220 x 480,,8.2
+Batts,Floor - Thermal Wide,R2.6,110,1220 x 580,,10.6
